@@ -7,7 +7,10 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.BasicClient;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
-import com.twitter.joauth.UnpackedRequest;
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.TwitterApi;
+import org.scribe.model.*;
+import org.scribe.oauth.OAuthService;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -15,9 +18,15 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
+import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.cert.X509Certificate;
+import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +37,8 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     private static AccessToken accessToken;
+    private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
+
 
     public static void run(String consumerKey, String consumerSecret, String token, String secret) throws InterruptedException {
         // Create an appropriately sized blocking queue
@@ -87,37 +98,150 @@ public class Main {
             System.out.println(requestToken.getAuthorizationURL());
             System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
             String pin = br.readLine();
-            try{
-                if(pin.length() > 0){
+            try {
+                if (pin.length() > 0) {
                     accessToken = twitter.getOAuthAccessToken(requestToken, pin);
-                }else{
+                } else {
                     accessToken = twitter.getOAuthAccessToken();
                 }
             } catch (TwitterException te) {
-                if(401 == te.getStatusCode()){
+                if (401 == te.getStatusCode()) {
                     System.out.println("Unable to get the access token.");
-                }else{
+                } else {
                     te.printStackTrace();
                 }
             }
         }
         //persist to the accessToken for future reference.
-        storeAccessToken(twitter.verifyCredentials().getId() , accessToken);
+        storeAccessToken(twitter.verifyCredentials().getId(), accessToken);
         Status status = twitter.updateStatus("Update");
         System.out.println("Successfully updated the status to [" + status.getText() + "].");
         System.exit(0);
     }
-    private void storeAccessToken(long useId, AccessToken accessToken){
+
+    private void storeAccessToken(long useId, AccessToken accessToken) {
         this.accessToken = accessToken;
     }
 
+    private void run2(String consumerKey, String consumerSecret) {
+        // If you choose to use a callback, "oauth_verifier" will be the return value by Twitter (request param)
+        OAuthService service = new ServiceBuilder()
+                .provider(TwitterApi.class)
+                .apiKey(consumerKey)
+                .apiSecret(consumerSecret)
+                .build();
+        Scanner in = new Scanner(System.in);
 
-    public static void main(String[] args) {
+        System.out.println("=== Twitter's OAuth Workflow ===");
+        System.out.println();
+
+        // Obtain the Request Token
+        System.out.println("Fetching the Request Token...");
+        Token requestToken = service.getRequestToken();
+        System.out.println("Got the Request Token!");
+        System.out.println();
+
+        System.out.println("Now go and authorize Scribe here:");
+        System.out.println(service.getAuthorizationUrl(requestToken));
+        System.out.println("And paste the verifier here");
+        System.out.print(">>");
+        Verifier verifier = new Verifier(in.nextLine());
+        System.out.println();
+
+        // Trade the Request Token and Verfier for the Access Token
+        System.out.println("Trading the Request Token for an Access Token...");
+        Token accessToken = service.getAccessToken(requestToken, verifier);
+        System.out.println("Got the Access Token!");
+        System.out.println("(if you're curious, it looks like this: " + accessToken + " )");
+        System.out.println();
+
+        // Now let's go and ask for a protected resource!
+        System.out.println("Now we're going to access a protected resource...");
+        OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+        service.signRequest(accessToken, request);
+        Response response = request.send();
+        System.out.println("Got it! Lets see what we found...");
+        System.out.println();
+        System.out.println(response.getBody());
+
+        System.out.println();
+        System.out.println("That's it man! Go and build something awesome with Scribe! :)");
+    }
+
+
+    public static void mainx(String[] args) {
         Main main = new Main();
         System.out.println("Main start");
         //main.run(args[0], args[1], args[2], args[3]);
         //main.testRun(args[0], args[1]);
+        main.run2(args[0], args[1]);
 
+
+    }
+
+    public static void main(String[] args) throws Exception {
+/*
+ *  fix for
+ *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
+ *       sun.security.validator.ValidatorException:
+ *           PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
+ *               unable to find valid certification path to requested target
+ */
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+
+                    public boolean isClientTrusted(java.security.cert.X509Certificate[] x509Certificates) {
+                        return false;
+                    }
+
+
+                    public boolean isServerTrusted(java.security.cert.X509Certificate[] x509Certificates) {
+                        return false;
+                    }
+
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
+
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
+
+                }
+        };
+
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+// Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+// Install the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+/*
+ * end of the fix
+ */
+
+        URL url = new URL("https://twitter.com");
+
+        URLConnection con = url.openConnection();
+        Reader reader = new InputStreamReader(con.getInputStream());
+        while (true) {
+            int ch = reader.read();
+            if (ch == -1) {
+                break;
+            }
+            System.out.print((char) ch);
+        }
+
+        Main main = new Main();
+        main.run2(args[0], args[1]);
 
     }
 }

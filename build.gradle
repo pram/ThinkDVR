@@ -3,7 +3,8 @@ apply plugin: 'java'
 ext.mainClassName = 'com.naughtyzombie.thinkdvr.Main'
 
 repositories {
-    mavenCentral() 
+    mavenCentral()
+    maven { url 'https://raw.github.com/fernandezpablo85/scribe-java/mvn-repo/' }
 }
 
 apply from: "${project.projectDir}/dependency/dependency.${version}"
