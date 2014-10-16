@@ -1,4 +1,9 @@
 apply plugin: 'java'
 
-version = '1.0.0'
 mainClassName = 'com.naughtyzombie.thinkdvr.Main'
+
+repositories {
+    mavenCentral() 
+}
+
+apply from: "${project.projectDir}/dependency/dependency.${version}"
