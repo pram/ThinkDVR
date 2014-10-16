@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
-mainClassName = 'com.naughtyzombie.thinkdvr.Main'
+ext.mainClassName = 'com.naughtyzombie.thinkdvr.Main'
 
 repositories {
     mavenCentral() 
