@@ -241,7 +241,8 @@ public class Main {
         }
 
         Main main = new Main();
-        main.run2(args[0], args[1]);
+        //main.run2(args[0], args[1]);
+        main.testRun(args[0], args[1]);
 
     }
 }
