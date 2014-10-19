@@ -11,18 +11,12 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import javax.net.ssl.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.X509Certificate;
@@ -36,6 +30,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Main {
 
+    public static final String TWITTER_ACCESS_TOKEN = "twitter.accessToken";
     private static AccessToken accessToken;
     private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
 
@@ -91,7 +86,7 @@ public class Main {
         Twitter twitter = TwitterFactory.getSingleton();
         twitter.setOAuthConsumer(consumerKey, consumerSecret);
         RequestToken requestToken = twitter.getOAuthRequestToken();
-        AccessToken accessToken = null;
+        AccessToken accessToken = readAccessToken();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (null == accessToken) {
             System.out.println("Open the following URL and grant access to your account:");
@@ -111,16 +106,23 @@ public class Main {
                     te.printStackTrace();
                 }
             }
+
+            if (accessToken != null) {
+                //persist to the accessToken for future reference.
+                storeAccessToken(twitter.verifyCredentials().getId(), accessToken);
+            }
         }
-        //persist to the accessToken for future reference.
-        storeAccessToken(twitter.verifyCredentials().getId(), accessToken);
-        Status status = twitter.updateStatus("Update");
-        System.out.println("Successfully updated the status to [" + status.getText() + "].");
+
+        twitter.setOAuthAccessToken(accessToken);
+        System.out.println(twitter.getScreenName());
+        //Status status = twitter.updateStatus("Update");
+        //System.out.println("Successfully updated the status to [" + status.getText() + "].");
         System.exit(0);
     }
 
-    private void storeAccessToken(long useId, AccessToken accessToken) {
+    private void storeAccessToken(long useId, AccessToken accessToken) throws IOException {
         this.accessToken = accessToken;
+        writeObject(accessToken);
     }
 
     private void run2(String consumerKey, String consumerSecret) {
@@ -167,6 +169,7 @@ public class Main {
         System.out.println();
         System.out.println("That's it man! Go and build something awesome with Scribe! :)");
     }
+
 
 
     public static void mainx(String[] args) {
@@ -244,5 +247,38 @@ public class Main {
         //main.run2(args[0], args[1]);
         main.testRun(args[0], args[1]);
 
+    }
+
+    private static void writeObject(AccessToken accessToken) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(TWITTER_ACCESS_TOKEN);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        System.out.println("Serialising:...");
+        System.out.println("Access Token ID: " + accessToken.getUserId());
+        System.out.println("Access Token: " + accessToken.toString());
+        System.out.println("Twitter User Name: " + accessToken.getScreenName());
+        out.writeObject(accessToken);
+        out.close();
+        fileOut.close();
+    }
+
+    private static AccessToken readAccessToken() {
+        AccessToken accessToken = null;
+        try {
+            File file = new File(TWITTER_ACCESS_TOKEN);
+            if (file.exists()) {
+                FileInputStream fileIn = new FileInputStream(TWITTER_ACCESS_TOKEN);
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                accessToken = (AccessToken) in.readObject();
+                in.close();
+                fileIn.close();
+            }
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException c) {
+            System.out.println(" DFTB class not found");
+            c.printStackTrace();
+            return null;
+        }
+        return accessToken;
     }
 }
