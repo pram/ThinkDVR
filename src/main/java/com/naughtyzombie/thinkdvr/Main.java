@@ -35,127 +35,11 @@ public class Main {
     private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
 
 
-    public void run(String consumerKey, String consumerSecret, String token, String secret) throws InterruptedException {
-        // Create an appropriately sized blocking queue
-        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
 
-        // Define our endpoint: By default, delimited=length is set (we need this for our processor)
-        // and stall warnings are on.
-        StatusesSampleEndpoint endpoint = new StatusesSampleEndpoint();
-        endpoint.stallWarnings(false);
 
-        Authentication auth = new OAuth1(consumerKey, consumerSecret, token, secret);
 
-        //Authentication auth = new com.twitter.hbc.httpclient.auth.BasicAuth(username, password);
 
-        // Create a new BasicClient. By default gzip is enabled.
-        BasicClient client = new ClientBuilder()
-                .name("ThinkDVR")
-                .hosts(Constants.STREAM_HOST)
-                .endpoint(endpoint)
-                .authentication(auth)
-                .processor(new StringDelimitedProcessor(queue))
-                .build();
 
-        // Establish a connection
-        client.connect();
-
-        // Do whatever needs to be done with messages
-        for (int msgRead = 0; msgRead < 1000; msgRead++) {
-            if (client.isDone()) {
-                System.out.println("Client connection closed unexpectedly: " + client.getExitEvent().getMessage());
-                break;
-            }
-
-            String msg = queue.poll(5, TimeUnit.SECONDS);
-            if (msg == null) {
-                System.out.println("Did not receive a message in 5 seconds");
-            } else {
-                System.out.println(msg);
-            }
-        }
-
-        client.stop();
-
-        // Print some stats
-        System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
-    }
-
-    public void runFilter(String consumerKey, String consumerSecret, String token, String secret) throws InterruptedException {
-        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
-        StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
-        // add some track terms
-        endpoint.trackTerms(Lists.newArrayList("twitterapi", "#yolo","#namuabs","#askolly","Lynda","#ebola"));
-
-        Authentication auth = new OAuth1(consumerKey, consumerSecret, token, secret);
-        // Authentication auth = new BasicAuth(username, password);
-
-        // Create a new BasicClient. By default gzip is enabled.
-        Client client = new ClientBuilder()
-                .hosts(Constants.STREAM_HOST)
-                .endpoint(endpoint)
-                .authentication(auth)
-                .processor(new StringDelimitedProcessor(queue))
-                .build();
-
-        // Establish a connection
-        client.connect();
-
-        // Do whatever needs to be done with messages
-        for (int msgRead = 0; msgRead < 1000; msgRead++) {
-            String msg = queue.take();
-            System.out.println(msg);
-        }
-
-        client.stop();
-
-    }
-
-    /*public static void getStream(AccessToken accessToken) throws InterruptedException {
-        // Create an appropriately sized blocking queue
-        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
-
-        // Define our endpoint: By default, delimited=length is set (we need this for our processor)
-        // and stall warnings are on.
-        StatusesSampleEndpoint endpoint = new StatusesSampleEndpoint();
-        endpoint.stallWarnings(false);
-
-        Authentication auth = new OAuth1(consumerKey, consumerSecret, token, secret);
-
-        //Authentication auth = new com.twitter.hbc.httpclient.auth.BasicAuth(username, password);
-
-        // Create a new BasicClient. By default gzip is enabled.
-        BasicClient client = new ClientBuilder()
-                .name("ThinkDVR")
-                .hosts(Constants.STREAM_HOST)
-                .endpoint(endpoint)
-                .authentication(auth)
-                .processor(new StringDelimitedProcessor(queue))
-                .build();
-
-        // Establish a connection
-        client.connect();
-
-        // Do whatever needs to be done with messages
-        for (int msgRead = 0; msgRead < 1000; msgRead++) {
-            if (client.isDone()) {
-                System.out.println("Client connection closed unexpectedly: " + client.getExitEvent().getMessage());
-                break;
-            }
-
-            String msg = queue.poll(5, TimeUnit.SECONDS);
-            if (msg == null) {
-                System.out.println("Did not receive a message in 5 seconds");
-            } else {
-                System.out.println(msg);
-            }
-        }
-
-        client.stop();
-
-        // Print some stats
-        System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
-    }*/
 
     private StatusListener listener1 = new StatusListener() {
         @Override
@@ -398,7 +282,7 @@ public class Main {
 
         Main main = new Main();
         //main.run2(args[0], args[1]);
-        main.testRun(args[0], args[1]);
+        //main.testRun(args[0], args[1]);
         //main.run(args[0], args[1],args[2], args[3]);
         //main.runFilter(args[0], args[1], args[2], args[3]);
 
