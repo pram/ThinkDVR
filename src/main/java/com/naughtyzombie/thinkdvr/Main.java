@@ -1,16 +1,19 @@
 package com.naughtyzombie.thinkdvr;
 
+import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
+import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
+import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StatusesSampleEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.BasicClient;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.TwitterApi;
-import org.scribe.model.*;
-import org.scribe.oauth.OAuthService;
+import com.twitter.hbc.twitter4j.Twitter4jStatusClient;
+import com.twitter.hbc.twitter4j.handler.StatusStreamHandler;
+import com.twitter.hbc.twitter4j.message.DisconnectMessage;
+import com.twitter.hbc.twitter4j.message.StallWarningMessage;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -20,10 +23,7 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.X509Certificate;
-import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by pattale on 16/10/2014.
@@ -35,7 +35,7 @@ public class Main {
     private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
 
 
-    public static void run(String consumerKey, String consumerSecret, String token, String secret) throws InterruptedException {
+    public void run(String consumerKey, String consumerSecret, String token, String secret) throws InterruptedException {
         // Create an appropriately sized blocking queue
         BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
 
@@ -79,6 +79,36 @@ public class Main {
 
         // Print some stats
         System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
+    }
+
+    public void runFilter(String consumerKey, String consumerSecret, String token, String secret) throws InterruptedException {
+        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
+        StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
+        // add some track terms
+        endpoint.trackTerms(Lists.newArrayList("twitterapi", "#yolo","#namuabs"));
+
+        Authentication auth = new OAuth1(consumerKey, consumerSecret, token, secret);
+        // Authentication auth = new BasicAuth(username, password);
+
+        // Create a new BasicClient. By default gzip is enabled.
+        Client client = new ClientBuilder()
+                .hosts(Constants.STREAM_HOST)
+                .endpoint(endpoint)
+                .authentication(auth)
+                .processor(new StringDelimitedProcessor(queue))
+                .build();
+
+        // Establish a connection
+        client.connect();
+
+        // Do whatever needs to be done with messages
+        for (int msgRead = 0; msgRead < 1000; msgRead++) {
+            String msg = queue.take();
+            System.out.println(msg);
+        }
+
+        client.stop();
+
     }
 
     /*public static void getStream(AccessToken accessToken) throws InterruptedException {
@@ -127,7 +157,87 @@ public class Main {
         System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
     }*/
 
-    private void testRun(String consumerKey, String consumerSecret) throws TwitterException, IOException {
+    private StatusListener listener1 = new StatusListener() {
+        @Override
+        public void onStatus(Status status) {
+            System.out.println("l1 status");
+        }
+
+        @Override
+        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+            System.out.println("l1 onDeletionNotice");
+        }
+
+        @Override
+        public void onTrackLimitationNotice(int limit) {
+            System.out.println("l1 onTrackLimitationNotice");
+        }
+
+        @Override
+        public void onScrubGeo(long user, long upToStatus) {
+            System.out.println("l1 onScrubGeo");
+        }
+
+        @Override
+        public void onStallWarning(StallWarning warning) {
+            System.out.println("l1 onStallWarning");
+        }
+
+        @Override
+        public void onException(Exception e) {
+            System.out.println("l1 onException");
+        }
+    };
+
+    // A bare bones StatusStreamHandler, which extends listener and gives some extra functionality
+    private StatusListener listener2 = new StatusStreamHandler() {
+        @Override
+        public void onStatus(Status status) {
+            System.out.println("l2 onStatus");
+        }
+
+        @Override
+        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+            System.out.println("l2 onDeletionNotice");
+        }
+
+        @Override
+        public void onTrackLimitationNotice(int limit) {
+            System.out.println("l2 onTrackLimitationNotice");
+        }
+
+        @Override
+        public void onScrubGeo(long user, long upToStatus) {
+            System.out.println("l2 onScrubGeo");
+        }
+
+        @Override
+        public void onStallWarning(StallWarning warning) {
+            System.out.println("l2 onStallWarning");
+        }
+
+        @Override
+        public void onException(Exception e) {
+            System.out.println("l2 onException");
+        }
+
+        @Override
+        public void onDisconnectMessage(DisconnectMessage message) {
+            System.out.println("l2 onDisconnectMessage");
+        }
+
+        @Override
+        public void onStallWarningMessage(StallWarningMessage warning) {
+            System.out.println("l2 onStallWarningMessage");
+        }
+
+        @Override
+        public void onUnknownMessageType(String s) {
+            System.out.println("l2 onUnknownMessageType");
+        }
+    };
+
+    private void testRun(String consumerKey, String consumerSecret) throws TwitterException, IOException, InterruptedException {
         // The factory instance is re-useable and thread safe.
         Twitter twitter = TwitterFactory.getSingleton();
         twitter.setOAuthConsumer(consumerKey, consumerSecret);
@@ -161,7 +271,63 @@ public class Main {
 
         twitter.setOAuthAccessToken(accessToken);
         System.out.println(twitter.getScreenName());
-        System.exit(0);
+        System.out.println("Connection Established ");
+
+        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
+
+        StatusesSampleEndpoint endpoint = new StatusesSampleEndpoint();
+        endpoint.stallWarnings(false);
+
+        Authentication auth = new OAuth1(consumerKey, consumerSecret, accessToken.getToken(), accessToken.getTokenSecret());
+
+        BasicClient client = new ClientBuilder()
+                .name("ThinkDVR")
+                .hosts(Constants.STREAM_HOST)
+                .endpoint(endpoint)
+                .authentication(auth)
+                .processor(new StringDelimitedProcessor(queue))
+                .build();
+
+        /*int numProcessingThreads = 4;
+        ExecutorService service = Executors.newFixedThreadPool(numProcessingThreads);
+
+        Twitter4jStatusClient t4jClient = new Twitter4jStatusClient(
+                client, queue, Lists.newArrayList(listener1, listener2), service);
+
+        t4jClient.connect();
+        for (int threads = 0; threads < numProcessingThreads; threads++) {
+            // This must be called once per processing thread
+            t4jClient.process();
+        }
+
+        Thread.sleep(5000);
+
+        client.stop();
+        */
+
+        // Establish a connection
+        client.connect();
+
+        // Do whatever needs to be done with messages
+        for (int msgRead = 0; msgRead < 1000; msgRead++) {
+            if (client.isDone()) {
+                System.out.println("Client connection closed unexpectedly: " + client.getExitEvent().getMessage());
+                break;
+            }
+
+            String msg = queue.poll(5, TimeUnit.SECONDS);
+            if (msg == null) {
+                System.out.println("Did not receive a message in 5 seconds");
+            } else {
+                System.out.println(msg);
+            }
+        }
+
+        client.stop();
+
+        // Print some stats
+        System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
+
     }
 
     private void storeAccessToken(long useId, AccessToken accessToken) throws IOException {
@@ -169,7 +335,7 @@ public class Main {
         writeObject(accessToken);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main2(String[] args) throws Exception {
 /*
  *  fix for
  *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
@@ -232,8 +398,16 @@ public class Main {
 
         Main main = new Main();
         //main.run2(args[0], args[1]);
-        main.testRun(args[0], args[1]);
+        //main.testRun(args[0], args[1]);
+        //main.run(args[0], args[1],args[2], args[3]);
+        main.runFilter(args[0], args[1], args[2], args[3]);
 
+
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Main main = new Main();
+        main.runFilter(args[0], args[1], args[2], args[3]);
     }
 
     private static void writeObject(AccessToken accessToken) throws IOException {
@@ -268,4 +442,6 @@ public class Main {
         }
         return accessToken;
     }
+
+
 }
