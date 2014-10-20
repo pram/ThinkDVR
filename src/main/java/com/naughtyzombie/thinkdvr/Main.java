@@ -85,7 +85,7 @@ public class Main {
         BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
         StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
         // add some track terms
-        endpoint.trackTerms(Lists.newArrayList("twitterapi", "#yolo","#namuabs"));
+        endpoint.trackTerms(Lists.newArrayList("twitterapi", "#yolo","#namuabs","#askolly","Lynda","#ebola"));
 
         Authentication auth = new OAuth1(consumerKey, consumerSecret, token, secret);
         // Authentication auth = new BasicAuth(username, password);
@@ -335,7 +335,7 @@ public class Main {
         writeObject(accessToken);
     }
 
-    public static void main2(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 /*
  *  fix for
  *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
@@ -398,16 +398,18 @@ public class Main {
 
         Main main = new Main();
         //main.run2(args[0], args[1]);
-        //main.testRun(args[0], args[1]);
+        main.testRun(args[0], args[1]);
         //main.run(args[0], args[1],args[2], args[3]);
-        main.runFilter(args[0], args[1], args[2], args[3]);
+        //main.runFilter(args[0], args[1], args[2], args[3]);
 
 
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void mainx(String[] args) throws InterruptedException, TwitterException, IOException {
         Main main = new Main();
-        main.runFilter(args[0], args[1], args[2], args[3]);
+        //main.runFilter(args[0], args[1], args[2], args[3]);
+        //main.run(args[0], args[1],args[2], args[3]);
+        main.testRun(args[0], args[1]);
     }
 
     private static void writeObject(AccessToken accessToken) throws IOException {
