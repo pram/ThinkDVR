@@ -14,6 +14,11 @@ import com.twitter.hbc.twitter4j.Twitter4jStatusClient;
 import com.twitter.hbc.twitter4j.handler.StatusStreamHandler;
 import com.twitter.hbc.twitter4j.message.DisconnectMessage;
 import com.twitter.hbc.twitter4j.message.StallWarningMessage;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -28,7 +33,7 @@ import java.util.concurrent.*;
 /**
  * Created by pattale on 16/10/2014.
  */
-public class Main {
+public class Main extends Application {
 
     public static final String TWITTER_ACCESS_TOKEN = "twitter.accessToken";
     private static AccessToken accessToken;
@@ -286,6 +291,8 @@ public class Main {
         //main.run(args[0], args[1],args[2], args[3]);
         //main.runFilter(args[0], args[1], args[2], args[3]);
 
+        launch(args);
+
 
     }
 
@@ -330,4 +337,11 @@ public class Main {
     }
 
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+        primaryStage.setTitle("ThinkDVR");
+        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.show();
+    }
 }
