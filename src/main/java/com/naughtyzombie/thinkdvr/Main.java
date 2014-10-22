@@ -15,11 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import twitter4j.*;
 import twitter4j.auth.AccessToken;
+import twitter4j.auth.Authorization;
 import twitter4j.auth.RequestToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -116,7 +116,7 @@ public class Main extends Application {
         */
 
         // Establish a connection
-        client.connect();
+        /*client.connect();
 
         // Do whatever needs to be done with messages
         for (int msgRead = 0; msgRead < 1000; msgRead++) {
@@ -133,10 +133,26 @@ public class Main extends Application {
             }
         }
 
-        client.stop();
+        client.stop();*/
 
         // Print some stats
-        System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
+        //System.out.printf("The client read %d messages!\n", client.getStatsTracker().getNumMessages());
+
+        //client.connect();
+
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true);
+        cb.setOAuthConsumerKey(consumerKey);
+        cb.setOAuthConsumerSecret(consumerSecret);
+        cb.setOAuthAccessToken(accessToken.getToken());
+        cb.setOAuthAccessTokenSecret(accessToken.getTokenSecret());
+
+
+        //TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
+        TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+
+        twitterStream.addListener(listener);
+        twitterStream.sample();
 
     }
 
@@ -207,7 +223,7 @@ public class Main extends Application {
         }
 
         Main main = new Main();
-        //main.testRun(args[0], args[1]);
+        main.testRun(args[0], args[1]);
 
         launch(args);
 
@@ -243,6 +259,38 @@ public class Main extends Application {
     public Stage getPrimaryStage() {
         return this.primaryStage;
     }
+
+    StatusListener listener = new StatusListener() {
+        @Override
+        public void onStatus(Status status) {
+            System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+        }
+
+        @Override
+        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+            System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+        }
+
+        @Override
+        public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+            System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
+        }
+
+        @Override
+        public void onScrubGeo(long userId, long upToStatusId) {
+            System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+        }
+
+        @Override
+        public void onStallWarning(StallWarning warning) {
+            System.out.println("Got stall warning:" + warning);
+        }
+
+        @Override
+        public void onException(Exception ex) {
+            ex.printStackTrace();
+        }
+    };
 
 
     /* Sample Messages
