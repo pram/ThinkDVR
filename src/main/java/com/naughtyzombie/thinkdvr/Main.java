@@ -1,23 +1,18 @@
 package com.naughtyzombie.thinkdvr;
 
-import com.google.common.collect.Lists;
+import com.naughtyzombie.thinkdvr.util.FileUtil;
 import com.twitter.hbc.ClientBuilder;
-import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
-import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StatusesSampleEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.BasicClient;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
-import com.twitter.hbc.twitter4j.Twitter4jStatusClient;
-import com.twitter.hbc.twitter4j.handler.StatusStreamHandler;
-import com.twitter.hbc.twitter4j.message.DisconnectMessage;
-import com.twitter.hbc.twitter4j.message.StallWarningMessage;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
@@ -40,98 +35,16 @@ public class Main extends Application {
     private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
 
 
-
-
-
-
-
-
-    private StatusListener listener1 = new StatusListener() {
-        @Override
-        public void onStatus(Status status) {
-            System.out.println("l1 status");
-        }
-
-        @Override
-        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-            System.out.println("l1 onDeletionNotice");
-        }
-
-        @Override
-        public void onTrackLimitationNotice(int limit) {
-            System.out.println("l1 onTrackLimitationNotice");
-        }
-
-        @Override
-        public void onScrubGeo(long user, long upToStatus) {
-            System.out.println("l1 onScrubGeo");
-        }
-
-        @Override
-        public void onStallWarning(StallWarning warning) {
-            System.out.println("l1 onStallWarning");
-        }
-
-        @Override
-        public void onException(Exception e) {
-            System.out.println("l1 onException");
-        }
-    };
-
-    // A bare bones StatusStreamHandler, which extends listener and gives some extra functionality
-    private StatusListener listener2 = new StatusStreamHandler() {
-        @Override
-        public void onStatus(Status status) {
-            System.out.println("l2 onStatus");
-        }
-
-        @Override
-        public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-            System.out.println("l2 onDeletionNotice");
-        }
-
-        @Override
-        public void onTrackLimitationNotice(int limit) {
-            System.out.println("l2 onTrackLimitationNotice");
-        }
-
-        @Override
-        public void onScrubGeo(long user, long upToStatus) {
-            System.out.println("l2 onScrubGeo");
-        }
-
-        @Override
-        public void onStallWarning(StallWarning warning) {
-            System.out.println("l2 onStallWarning");
-        }
-
-        @Override
-        public void onException(Exception e) {
-            System.out.println("l2 onException");
-        }
-
-        @Override
-        public void onDisconnectMessage(DisconnectMessage message) {
-            System.out.println("l2 onDisconnectMessage");
-        }
-
-        @Override
-        public void onStallWarningMessage(StallWarningMessage warning) {
-            System.out.println("l2 onStallWarningMessage");
-        }
-
-        @Override
-        public void onUnknownMessageType(String s) {
-            System.out.println("l2 onUnknownMessageType");
-        }
-    };
+    //JavaFX Stuff
+    private Stage primaryStage;
+    private BorderPane rootLayout;
 
     private void testRun(String consumerKey, String consumerSecret) throws TwitterException, IOException, InterruptedException {
         // The factory instance is re-useable and thread safe.
         Twitter twitter = TwitterFactory.getSingleton();
         twitter.setOAuthConsumer(consumerKey, consumerSecret);
         RequestToken requestToken = twitter.getOAuthRequestToken();
-        AccessToken accessToken = readAccessToken();
+        AccessToken accessToken = FileUtil.readAccessToken();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (null == accessToken) {
             System.out.println("Open the following URL and grant access to your account:");
@@ -221,7 +134,7 @@ public class Main extends Application {
 
     private void storeAccessToken(long useId, AccessToken accessToken) throws IOException {
         this.accessToken = accessToken;
-        writeObject(accessToken);
+        FileUtil.writeObject(accessToken);
     }
 
     public static void main(String[] args) throws Exception {
@@ -286,54 +199,11 @@ public class Main extends Application {
         }
 
         Main main = new Main();
-        //main.run2(args[0], args[1]);
         //main.testRun(args[0], args[1]);
-        //main.run(args[0], args[1],args[2], args[3]);
-        //main.runFilter(args[0], args[1], args[2], args[3]);
 
         launch(args);
 
 
-    }
-
-    public static void mainx(String[] args) throws InterruptedException, TwitterException, IOException {
-        Main main = new Main();
-        //main.runFilter(args[0], args[1], args[2], args[3]);
-        //main.run(args[0], args[1],args[2], args[3]);
-        main.testRun(args[0], args[1]);
-    }
-
-    private static void writeObject(AccessToken accessToken) throws IOException {
-        FileOutputStream fileOut = new FileOutputStream(TWITTER_ACCESS_TOKEN);
-        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        System.out.println("Serialising:...");
-        System.out.println("Access Token ID: " + accessToken.getUserId());
-        System.out.println("Access Token: " + accessToken.toString());
-        System.out.println("Twitter User Name: " + accessToken.getScreenName());
-        out.writeObject(accessToken);
-        out.close();
-        fileOut.close();
-    }
-
-    private static AccessToken readAccessToken() {
-        AccessToken accessToken = null;
-        try {
-            File file = new File(TWITTER_ACCESS_TOKEN);
-            if (file.exists()) {
-                FileInputStream fileIn = new FileInputStream(TWITTER_ACCESS_TOKEN);
-                ObjectInputStream in = new ObjectInputStream(fileIn);
-                accessToken = (AccessToken) in.readObject();
-                in.close();
-                fileIn.close();
-            }
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println(" DFTB class not found");
-            c.printStackTrace();
-            return null;
-        }
-        return accessToken;
     }
 
 
