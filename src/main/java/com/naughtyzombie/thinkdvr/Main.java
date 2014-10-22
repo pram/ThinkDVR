@@ -12,18 +12,26 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import twitter4j.*;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.X509Certificate;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by pattale on 16/10/2014.
@@ -37,7 +45,7 @@ public class Main extends Application {
 
     //JavaFX Stuff
     private Stage primaryStage;
-    private BorderPane rootLayout;
+    private AnchorPane rootLayout;
 
     private void testRun(String consumerKey, String consumerSecret) throws TwitterException, IOException, InterruptedException {
         // The factory instance is re-useable and thread safe.
@@ -209,10 +217,30 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
-        Parent root = new FXMLLoader().load(getClass().getResource("/fxml/Main.fxml"));
-        primaryStage.setTitle("ThinkDVR");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
+
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("ThinkDVR");
+
+        initRootLayout();
+    }
+
+    public void initRootLayout() {
+        try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("/fxml/Main.fxml"));
+            this.rootLayout = loader.load();
+
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            this.primaryStage.setScene(scene);
+            this.primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Stage getPrimaryStage() {
+        return this.primaryStage;
     }
 }
