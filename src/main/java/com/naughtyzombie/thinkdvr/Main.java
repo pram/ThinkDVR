@@ -1,5 +1,6 @@
 package com.naughtyzombie.thinkdvr;
 
+import com.naughtyzombie.thinkdvr.model.Message;
 import com.naughtyzombie.thinkdvr.util.FileUtil;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Constants;
@@ -9,6 +10,8 @@ import com.twitter.hbc.httpclient.BasicClient;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -41,7 +44,7 @@ public class Main extends Application {
     public static final String TWITTER_ACCESS_TOKEN = "twitter.accessToken";
     private static AccessToken accessToken;
     private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
-
+    private ObservableList<Message> messageObservableList = FXCollections.observableArrayList();
 
     //JavaFX Stuff
     private Stage primaryStage;
@@ -223,11 +226,23 @@ public class Main extends Application {
         }
 
         Main main = new Main();
-        main.testRun(args[0], args[1]);
+        //main.testRun(args[0], args[1]);
+
+        main.sampleData();
+
 
         launch(args);
 
 
+    }
+
+    private void sampleData() {
+        messageObservableList.add(new Message("wiigle","jiggle"));
+        messageObservableList.add(new Message("gooop","ttttttt"));
+    }
+
+    public ObservableList<Message> getMessageList() {
+        return this.messageObservableList;
     }
 
 
