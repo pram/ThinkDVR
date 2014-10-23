@@ -13,14 +13,12 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
-import twitter4j.auth.Authorization;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -34,7 +32,6 @@ import java.net.URLConnection;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by pattale on 16/10/2014.
@@ -44,11 +41,11 @@ public class Main extends Application {
     public static final String TWITTER_ACCESS_TOKEN = "twitter.accessToken";
     private static AccessToken accessToken;
     private static final String PROTECTED_RESOURCE_URL = "https://api.twitter.com/1.1/account/verify_credentials.json";
-    private ObservableList<Message> messageObservableList = FXCollections.observableArrayList();
+    private ObservableList<Message> messageData = FXCollections.observableArrayList();
 
     //JavaFX Stuff
     private Stage primaryStage;
-    private AnchorPane rootLayout;
+    private BorderPane rootLayout;
 
     private void testRun(String consumerKey, String consumerSecret) throws TwitterException, IOException, InterruptedException {
         // The factory instance is re-useable and thread safe.
@@ -228,21 +225,24 @@ public class Main extends Application {
         Main main = new Main();
         //main.testRun(args[0], args[1]);
 
-        main.sampleData();
-
 
         launch(args);
 
 
     }
 
-    private void sampleData() {
-        messageObservableList.add(new Message("wiigle","jiggle"));
-        messageObservableList.add(new Message("gooop","ttttttt"));
+
+    public Main() {
+        messageData.add(new Message("wiigle", "jiggle"));
+        messageData.add(new Message("gooop", "ttttttt"));
     }
 
-    public ObservableList<Message> getMessageList() {
-        return this.messageObservableList;
+    private void sampleData() {
+
+    }
+
+    public ObservableList<Message> getMessageData() {
+        return this.messageData;
     }
 
 
@@ -253,6 +253,8 @@ public class Main extends Application {
         this.primaryStage.setTitle("ThinkDVR");
 
         initRootLayout();
+
+        showMessageOverview();
     }
 
     public void initRootLayout() {
@@ -266,6 +268,24 @@ public class Main extends Application {
             Scene scene = new Scene(rootLayout);
             this.primaryStage.setScene(scene);
             this.primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showMessageOverview() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("/fxml/MessageOverview.fxml"));
+            AnchorPane messageOverview = loader.load();
+
+            // Set person overview into the center of root layout.
+            rootLayout.setCenter(messageOverview);
+
+            MessageOverviewController controller = loader.getController();
+            controller.setMain(this);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -306,6 +326,8 @@ public class Main extends Application {
             ex.printStackTrace();
         }
     };
+
+
 
 
     /* Sample Messages

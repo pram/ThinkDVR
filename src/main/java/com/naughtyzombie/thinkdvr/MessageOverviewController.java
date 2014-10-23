@@ -2,13 +2,14 @@ package com.naughtyzombie.thinkdvr;
 
 import com.naughtyzombie.thinkdvr.model.Message;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 /**
  * Created by pram on 21/10/2014.
  */
-public class MainController {
+public class MessageOverviewController {
     @FXML
     private TableView<Message> messageTable;
     @FXML
@@ -16,9 +17,16 @@ public class MainController {
     @FXML
     private TableColumn<Message, String> textColumn;
 
+    @FXML
+    private Label screenNameLabel;
+
+    @FXML
+    private Label textLabel;
+
+
     private Main main;
 
-    public MainController() {
+    public MessageOverviewController() {
     }
 
     @FXML
@@ -29,6 +37,6 @@ public class MainController {
 
     public void setMain(Main main) {
         this.main = main;
-        messageTable.setItems(main.getMessageList());
+        messageTable.setItems(main.getMessageData());
     }
 }
