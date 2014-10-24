@@ -162,13 +162,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws Exception {
-/*
- *  fix for
- *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
- *       sun.security.validator.ValidatorException:
- *           PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
- *               unable to find valid certification path to requested target
- */
+
         TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
 
