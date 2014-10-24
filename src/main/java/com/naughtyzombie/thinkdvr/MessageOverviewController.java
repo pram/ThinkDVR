@@ -33,10 +33,26 @@ public class MessageOverviewController {
     private void initialize() {
         screenNameColumn.setCellValueFactory(cellData -> cellData.getValue().getScreenNameProperty());
         textColumn.setCellValueFactory(cellData -> cellData.getValue().getTextProperty());
+
+        showMessageDetails(null);
+
+        messageTable.getSelectionModel().selectedItemProperty().addListener((
+                        observable, oldValue, newValue) -> showMessageDetails(newValue)
+        );
     }
 
     public void setMain(Main main) {
         this.main = main;
         messageTable.setItems(main.getMessageData());
+    }
+
+    private void showMessageDetails(Message message) {
+        if (message != null) {
+            screenNameLabel.setText(message.getScreenName());
+            textLabel.setText(message.getText());
+        } else {
+            screenNameLabel.setText("");
+            textLabel.setText("");
+        }
     }
 }
