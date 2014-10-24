@@ -5,7 +5,7 @@ package com.naughtyzombie.thinkdvr;/**
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class LoginController extends Application {
+public class LoginScreenController extends Application {
 
     public static void main(String[] args) {
         launch(args);

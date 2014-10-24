@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <WebView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="47.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="534.0" layoutY="14.0" mnemonicParsing="false" text="Cancel" />
+            <Button layoutX="474.0" layoutY="14.0" mnemonicParsing="false" text="OK" />
+            <TextField layoutX="14.0" layoutY="11.0" prefHeight="25.0" prefWidth="435.0" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
