@@ -49,6 +49,7 @@
                         <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
+                  <Button layoutX="235.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleDialog" text="OK" />
                </children>
             </AnchorPane>
          </items>

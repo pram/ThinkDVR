@@ -2,9 +2,13 @@ package com.naughtyzombie.thinkdvr;
 
 import com.naughtyzombie.thinkdvr.model.Message;
 import javafx.fxml.FXML;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.controlsfx.dialog.CommandLinksDialog;
+import org.controlsfx.dialog.Dialogs;
+import org.controlsfx.dialog.LoginDialog;
 
 /**
  * Created by pram on 21/10/2014.
@@ -55,4 +59,20 @@ public class MessageOverviewController {
             textLabel.setText("");
         }
     }
+
+    @FXML
+    private void handleDeleteMessage() {
+        int selectedIndex = messageTable.getSelectionModel().getSelectedIndex();
+        messageTable.getItems().remove(selectedIndex);
+    }
+
+    @FXML
+    private void handleDialog() {
+        Dialogs.create()
+                .title("Test Dialog")
+                .masthead("Warning")
+                .message("Woot!")
+                .showConfirm();
+    }
+
 }
