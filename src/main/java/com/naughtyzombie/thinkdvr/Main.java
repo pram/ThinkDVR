@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -248,7 +249,9 @@ public class Main extends Application {
 
         initRootLayout();
 
-        showMessageOverview();
+        showLoginScreen();
+
+        //showMessageOverview();
     }
 
     public void initRootLayout() {
@@ -279,6 +282,29 @@ public class Main extends Application {
 
             MessageOverviewController controller = loader.getController();
             controller.setMain(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showLoginScreen() {
+        try {
+            // Load person overview.
+            /*FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("/fxml/LoginScreen.fxml"));
+            AnchorPane loginScreen = loader.load();
+
+            // Set person overview into the center of root layout.
+            //rootLayout.setCenter(messageOverview);
+
+            LoginScreenController controller = loader.getController();
+            //controller.setMain(this);*/
+
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/LoginScreen.fxml"));
+            primaryStage.setTitle("WebViewSampel");
+            primaryStage.setScene(new Scene(root, 300, 400));
+            primaryStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

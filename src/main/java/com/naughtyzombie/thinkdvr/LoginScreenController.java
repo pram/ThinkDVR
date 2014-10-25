@@ -1,18 +1,24 @@
-package com.naughtyzombie.thinkdvr;/**
+package com.naughtyzombie.thinkdvr;
+/**
  * Created by pram on 20/10/2014.
  */
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
-public class LoginScreenController extends Application {
+public class LoginScreenController {
+    @FXML
+    private TextField txtfield;
+    @FXML
+    private WebView web = new WebView();
+    private WebEngine webEngine;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-
+    @FXML
+    private void OnWeb(ActionEvent event){
+        webEngine = web.getEngine();
+        webEngine.load(txtfield.getText());
     }
 }
