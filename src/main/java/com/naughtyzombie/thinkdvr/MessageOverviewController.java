@@ -71,7 +71,7 @@ public class MessageOverviewController {
         Dialogs.create()
                 .title("Test Dialog")
                 .masthead("Warning")
-                .message("Woot!")
+                .message("Proper Message")
                 .showConfirm();
     }
 
