@@ -17,7 +17,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -301,10 +303,18 @@ public class Main extends Application {
             LoginScreenController controller = loader.getController();
             //controller.setMain(this);*/
 
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/LoginScreen.fxml"));
+            /*Parent root = FXMLLoader.load(getClass().getResource("/fxml/LoginScreen.fxml"));
             primaryStage.setTitle("WebViewSampel");
             primaryStage.setScene(new Scene(root, 300, 400));
-            primaryStage.show();
+            primaryStage.show();*/
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.setScene(new Scene(loader.load()));
+            LoginScreenController controller = loader.<LoginScreenController>getController();
+            controller.initData("http://www.eurogamer.net");
+
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

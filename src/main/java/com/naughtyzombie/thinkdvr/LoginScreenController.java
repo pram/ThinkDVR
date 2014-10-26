@@ -21,4 +21,9 @@ public class LoginScreenController {
         webEngine = web.getEngine();
         webEngine.load(txtfield.getText());
     }
+
+    public void initData(String url) {
+        webEngine = web.getEngine();
+        webEngine.load(url);
+    }
 }
