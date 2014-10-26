@@ -311,6 +311,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Login to Twitter");
             LoginScreenController controller = loader.<LoginScreenController>getController();
             controller.initData("http://www.eurogamer.net");
 
