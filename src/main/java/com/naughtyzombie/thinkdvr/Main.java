@@ -10,14 +10,13 @@ import com.twitter.hbc.httpclient.BasicClient;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import twitter4j.*;
@@ -58,9 +57,11 @@ public class Main extends Application {
         AccessToken accessToken = FileUtil.readAccessToken();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (null == accessToken) {
-            System.out.println("Open the following URL and grant access to your account:");
-            System.out.println(requestToken.getAuthorizationURL());
-            System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
+            Platform.runLater(() -> showLoginScreen(requestToken.getAuthorizationURL()));
+
+            //System.out.println("Open the following URL and grant access to your account:");
+            //System.out.println(requestToken.getAuthorizationURL());
+            //System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
             String pin = br.readLine();
             try {
                 if (pin.length() > 0) {
@@ -220,7 +221,7 @@ public class Main extends Application {
         }
 
         Main main = new Main();
-        //main.testRun(args[0], args[1]);
+        main.testRun(args[0], args[1]);
 
 
         launch(args);
@@ -251,7 +252,7 @@ public class Main extends Application {
 
         initRootLayout();
 
-        showLoginScreen();
+        showLoginScreen("http://www.eurogamer.net");
 
         //showMessageOverview();
     }
@@ -290,30 +291,14 @@ public class Main extends Application {
         }
     }
 
-    public void showLoginScreen() {
+    public void showLoginScreen(String url) {
         try {
-            // Load person overview.
-            /*FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/LoginScreen.fxml"));
-            AnchorPane loginScreen = loader.load();
-
-            // Set person overview into the center of root layout.
-            //rootLayout.setCenter(messageOverview);
-
-            LoginScreenController controller = loader.getController();
-            //controller.setMain(this);*/
-
-            /*Parent root = FXMLLoader.load(getClass().getResource("/fxml/LoginScreen.fxml"));
-            primaryStage.setTitle("WebViewSampel");
-            primaryStage.setScene(new Scene(root, 300, 400));
-            primaryStage.show();*/
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Login to Twitter");
             LoginScreenController controller = loader.<LoginScreenController>getController();
-            controller.initData("http://www.eurogamer.net");
+            controller.initData(url);
 
             stage.show();
 
