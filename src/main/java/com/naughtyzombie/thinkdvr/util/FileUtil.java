@@ -1,6 +1,6 @@
 package com.naughtyzombie.thinkdvr.util;
 
-import com.naughtyzombie.thinkdvr.Main;
+import com.naughtyzombie.thinkdvr.OldMain;
 import twitter4j.auth.AccessToken;
 
 import java.io.*;
@@ -10,7 +10,7 @@ import java.io.*;
  */
 public class FileUtil {
     public static void writeObject(AccessToken accessToken) throws IOException {
-        FileOutputStream fileOut = new FileOutputStream(Main.TWITTER_ACCESS_TOKEN);
+        FileOutputStream fileOut = new FileOutputStream(OldMain.TWITTER_ACCESS_TOKEN);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         System.out.println("Serialising:...");
         System.out.println("Access Token ID: " + accessToken.getUserId());
@@ -24,9 +24,9 @@ public class FileUtil {
     public static AccessToken readAccessToken() {
         AccessToken accessToken = null;
         try {
-            File file = new File(Main.TWITTER_ACCESS_TOKEN);
+            File file = new File(OldMain.TWITTER_ACCESS_TOKEN);
             if (file.exists()) {
-                FileInputStream fileIn = new FileInputStream(Main.TWITTER_ACCESS_TOKEN);
+                FileInputStream fileIn = new FileInputStream(OldMain.TWITTER_ACCESS_TOKEN);
                 ObjectInputStream in = new ObjectInputStream(fileIn);
                 accessToken = (AccessToken) in.readObject();
                 in.close();

@@ -38,7 +38,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by pattale on 16/10/2014.
  */
-public class Main extends Application {
+public class OldMain extends Application {
 
     public static final String TWITTER_ACCESS_TOKEN = "twitter.accessToken";
     private static AccessToken accessToken;
@@ -220,8 +220,8 @@ public class Main extends Application {
             System.out.print((char) ch);
         }
 
-        Main main = new Main();
-        main.testRun(args[0], args[1]);
+        OldMain oldMain = new OldMain();
+        oldMain.testRun(args[0], args[1]);
 
 
         launch(args);
@@ -230,7 +230,7 @@ public class Main extends Application {
     }
 
 
-    public Main() {
+    public OldMain() {
         messageData.add(new Message("wiigle", "jiggle"));
         messageData.add(new Message("gooop", "ttttttt"));
     }
@@ -261,7 +261,7 @@ public class Main extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/Main.fxml"));
+            loader.setLocation(OldMain.class.getResource("/fxml/Main.fxml"));
             this.rootLayout = loader.load();
 
             // Show the scene containing the root layout.
@@ -277,14 +277,14 @@ public class Main extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/fxml/MessageOverview.fxml"));
+            loader.setLocation(OldMain.class.getResource("/fxml/MessageOverview.fxml"));
             AnchorPane messageOverview = loader.load();
 
             // Set person overview into the center of root layout.
             rootLayout.setCenter(messageOverview);
 
             MessageOverviewController controller = loader.getController();
-            controller.setMain(this);
+            controller.setOldMain(this);
 
         } catch (IOException e) {
             e.printStackTrace();
