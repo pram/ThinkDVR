@@ -8,6 +8,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -26,6 +27,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
+
 public class MainApp extends Application {
 
     private LoginService loginService;
@@ -43,22 +46,35 @@ public class MainApp extends Application {
         final VBox rootNode = new VBox();
         rootNode.setAlignment(Pos.CENTER);
         final Button btn = new Button("Launch Login Dialog Window");
-        btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(final MouseEvent event) {
-                if (loginService != null) {
-                    loginService.hide();
-                }
-                loginService = createLoginDialog(primaryStage);
-                loginService.start();
-            }
+        btn.setOnMouseClicked(event -> {
+            //if (loginService != null) {
+            //    loginService.hide();
+            //}
+            //loginService = createLoginDialog(primaryStage);
+            //loginService.start();
+            showLoginScreen("http://www.eurogamer.net", primaryStage);
         });
         rootNode.getChildren().add(btn);
-        primaryStage.setTitle("Dialog Service Demo");
+        primaryStage.setTitle("ThinkDVR");
         primaryStage.setScene(new Scene(rootNode, 800, 500, Color.BLACK));
-        primaryStage.getScene().getStylesheets().add(
-                MainApp.class.getResource("/view/Dialog.css").toExternalForm());
+        primaryStage.getScene().getStylesheets().add(MainApp.class.getResource("/view/Dialog.css").toExternalForm());
         primaryStage.show();
+    }
+
+    public void showLoginScreen(String url, Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+            //Stage stage = new Stage(StageStyle.DECORATED);
+            primaryStage.setScene(new Scene(loader.load()));
+            primaryStage.setTitle("Login to Twitter");
+            LoginScreenController controller = loader.<LoginScreenController>getController();
+            controller.initData(url);
+
+            primaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public LoginService createLoginDialog(final Stage primaryStage) {
