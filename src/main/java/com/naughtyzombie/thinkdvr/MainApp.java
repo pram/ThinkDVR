@@ -11,12 +11,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjustBuilder;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
@@ -52,7 +54,7 @@ public class MainApp extends Application {
             //}
             //loginService = createLoginDialog(primaryStage);
             //loginService.start();
-            showLoginScreen("http://www.eurogamer.net", primaryStage);
+            showLoginScreen("http://news.bbc.co.uk", primaryStage);
         });
         rootNode.getChildren().add(btn);
         primaryStage.setTitle("ThinkDVR");
@@ -62,15 +64,47 @@ public class MainApp extends Application {
     }
 
     public void showLoginScreen(String url, Stage primaryStage) {
+        //Parent root;
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+            /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
             //Stage stage = new Stage(StageStyle.DECORATED);
             primaryStage.setScene(new Scene(loader.load()));
             primaryStage.setTitle("Login to Twitter");
             LoginScreenController controller = loader.<LoginScreenController>getController();
-            controller.initData(url);
+            controller.initData(url);*/
 
-            primaryStage.show();
+            /*root = FXMLLoader.load(getClass().getClassLoader().getResource("/fxml/LoginScreen.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("My New Stage Title");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.show();*/
+
+            //Parent root=  FXMLLoader.load(getClass().getResource("/fxml/LoginScreen.fxml"));
+            //ServerConfigChooser controller = new ServerConfigChooser();
+            LoginScreenController controller = new LoginScreenController();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+            Parent root = fxmlLoader.load();
+            fxmlLoader.setRoot(root);
+
+            //root.setController(controller);
+            //loader.setRoot(controller);
+            //Parent root;
+            //try {
+            //root = loader.load();
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+
+            stage.setScene(scene);
+            stage.show();
+
+            //controller.initData(url);
+            /*} catch (IOException ex) {
+                Logger.getLogger(ServerConfigChooser.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+
+            //primaryStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

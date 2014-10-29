@@ -7,34 +7,40 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naughtyzombie.thinkdvr.LoginScreenController">
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.naughtyzombie.thinkdvr.LoginScreenController">
     <children>
-        <VBox alignment="CENTER" prefHeight="400.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
             <children>
-                <WebView fx:id="web" prefHeight="620.0" prefWidth="1200.0" VBox.vgrow="ALWAYS" />
-            <HBox prefHeight="68.0" prefWidth="1200.0" VBox.vgrow="NEVER">
-               <children>
-                      <TextField fx:id="txtfield" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                      <Button id="changeBtn" mnemonicParsing="false" onAction="#OnWeb" text="OK">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" text="Cancel">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </HBox>
+                <VBox alignment="CENTER" prefHeight="400.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <WebView fx:id="web" prefHeight="620.0" prefWidth="1200.0" VBox.vgrow="ALWAYS" />
+                        <HBox prefHeight="68.0" prefWidth="1200.0" VBox.vgrow="NEVER">
+                            <children>
+                                <TextField fx:id="txtfield" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                </TextField>
+                                <Button id="changeBtn" mnemonicParsing="false" onAction="#OnWeb" text="OK">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                </Button>
+                                <Button mnemonicParsing="false" text="Cancel">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                </Button>
+                            </children>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                </VBox>
             </children>
-        </VBox>
+        </AnchorPane>
     </children>
-</AnchorPane>
+</fx:root>
+
+
