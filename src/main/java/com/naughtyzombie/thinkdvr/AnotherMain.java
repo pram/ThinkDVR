@@ -3,6 +3,7 @@ package com.naughtyzombie.thinkdvr;
 import com.naughtyzombie.thinkdvr.control.ThinkDVRPopover;
 import com.naughtyzombie.thinkdvr.control.ThinkDVRToolbar;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
@@ -11,6 +12,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by pattale on 04/11/2014.
@@ -60,10 +71,38 @@ public class AnotherMain extends Application {
         toolBar.addLeftItems(listButton);
     }
 
+    private void setStylesheets() {
+        final String EXTERNAL_STYLESHEET = "http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600";
+        scene.getStylesheets().setAll("/thinkdvr/ThinkDVRStylesCommon.css");
+        Thread backgroundThread = new Thread(() -> {
+            try {
+                URL url = new URL(EXTERNAL_STYLESHEET);
+                try (
+                        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+                        Reader newReader = Channels.newReader(rbc, "ISO-8859-1");
+                        BufferedReader bufferedReader = new BufferedReader(newReader)
+                ) {
+                    // Checking whether we can read a line from this url
+                    // without exception
+                    bufferedReader.readLine();
+                }
+                Platform.runLater(() -> {
+                    scene.getStylesheets().add(EXTERNAL_STYLESHEET);
+                });
+            }catch (MalformedURLException ex) {
+                Logger.getLogger(AnotherMain.class.getName()).log(Level.FINE, "Failed to load external stylesheet", ex);
+            }catch (IOException ex) {
+                Logger.getLogger(AnotherMain.class.getName()).log(Level.FINE, "Failed to load external stylesheet", ex);
+            }
+        }, "Trying to reach external styleshet");
+        backgroundThread.setDaemon(true);
+        backgroundThread.start();
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         scene = new Scene(root, 1024, 768, Color.BLACK);
-
+        setStylesheets();
         stage.setScene(scene);
         stage.setTitle("ThinkDVR");
         stage.show();
