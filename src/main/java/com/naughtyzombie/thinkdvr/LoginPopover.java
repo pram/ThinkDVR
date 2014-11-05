@@ -2,34 +2,40 @@ package com.naughtyzombie.thinkdvr;
 
 import com.naughtyzombie.thinkdvr.control.ThinkDVRPopover;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
+import javafx.scene.web.WebView;
 
 /**
  * Created by pattale on 04/11/2014.
  */
-public class LoginPopover implements ThinkDVRPopover.Page {
+public class LoginPopover extends Control implements ThinkDVRPopover.Page {
+
+    private ThinkDVRPopover popover;
+    private WebView webView;
+
     @Override
     public void setPopover(ThinkDVRPopover popover) {
-
+        this.popover = popover;
     }
 
     @Override
     public ThinkDVRPopover getPopover() {
-        return null;
+        return this.popover;
     }
 
     @Override
     public Node getPageNode() {
-        return null;
+        return this;
     }
 
     @Override
     public String getPageTitle() {
-        return null;
+        return "Woot!";
     }
 
     @Override
     public String leftButtonText() {
-        return null;
+        return "ggggg";
     }
 
     @Override
@@ -39,7 +45,7 @@ public class LoginPopover implements ThinkDVRPopover.Page {
 
     @Override
     public String rightButtonText() {
-        return null;
+        return "jjjjjj";
     }
 
     @Override

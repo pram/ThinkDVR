@@ -67,12 +67,14 @@ public class AnotherMain extends Application {
         popover.setPrefWidth(440);
         root.getChildren().add(popover);
 
+        final LoginPopover rootPage = new LoginPopover();
+
         listButton.setOnMouseClicked((MouseEvent e) -> {
             if (popover.isVisible()) {
                 popover.hide();
             } else {
                 popover.clearPages();
-                //popover.pushPage(rootPage);
+                popover.pushPage(rootPage);
                 popover.show(() -> listButton.setSelected(false));
             }
         });
