@@ -62,4 +62,12 @@ public class LoginPopover extends Control implements ThinkDVRPopover.Page {
     public void handleHidden() {
 
     }
+
+    @Override protected double computePrefWidth(double height) {
+        return 200;
+    }
+
+    @Override protected double computePrefHeight(double width) {
+        return 88;
+    }
 }
