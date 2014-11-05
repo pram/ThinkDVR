@@ -5,7 +5,9 @@ import com.naughtyzombie.thinkdvr.control.ThinkDVRToolbar;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -31,6 +33,7 @@ public class AnotherMain extends Application {
     private Scene scene;
     private Pane root;
     private ThinkDVRToolbar toolBar;
+    private Label titleLabel;
     private ToggleButton listButton;
     private ThinkDVRPopover popover;
 
@@ -43,6 +46,9 @@ public class AnotherMain extends Application {
                 final double w = getWidth();
                 final double h = getHeight();
                 popover.autosize();
+                Point2D listBtnBottomCenter = listButton.localToScene(listButton.getWidth()/2, listButton.getHeight());
+                popover.setLayoutX((int)listBtnBottomCenter.getX()-50);
+                popover.setLayoutY((int)listBtnBottomCenter.getY()+20);
                 final double toolBarHeight = toolBar.prefHeight(w);
 
             }
@@ -50,6 +56,9 @@ public class AnotherMain extends Application {
 
         toolBar = new ThinkDVRToolbar();
         root.getChildren().add(toolBar);
+
+        titleLabel = new Label("ThinkDVR");
+        HBox.setMargin(titleLabel, new Insets(0, 0, 0, 7));
 
         listButton = new ToggleButton();
         HBox.setMargin(listButton, new Insets(0, 0, 0, 7));
@@ -68,7 +77,7 @@ public class AnotherMain extends Application {
             }
         });
 
-        toolBar.addLeftItems(listButton);
+        toolBar.addLeftItems(titleLabel,listButton);
     }
 
     private void setStylesheets() {
