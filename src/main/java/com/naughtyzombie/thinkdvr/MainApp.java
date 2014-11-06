@@ -147,12 +147,7 @@ public class MainApp extends Application {
                 "Please provide a Twitter Username and Password",
                 null, "Login", 550d, 300d, submitService, closeBtn, username, password);
         if (closeBtn != null) {
-            closeBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(final MouseEvent event) {
-                    loginService.hide();
-                }
-            });
+            closeBtn.setOnMouseClicked(event -> loginService.hide());
         }
         return loginService;
     }
@@ -183,12 +178,7 @@ public class MainApp extends Application {
             window.getScene().getStylesheets().setAll(parent.getScene().getStylesheets());
         }
         final Button submitBtn = ButtonBuilder.create().text(submitLabel).defaultButton(
-                true).onAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent actionEvent) {
-                submitService.restart();
-            }
-        }).build();
+                true).onAction(actionEvent -> submitService.restart()).build();
         final FlowPane flowPane = new FlowPane();
         flowPane.setAlignment(Pos.CENTER);
         flowPane.setVgap(20d);

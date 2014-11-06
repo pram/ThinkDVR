@@ -1,17 +1,35 @@
 package com.naughtyzombie.thinkdvr;
 
 import com.naughtyzombie.thinkdvr.control.ThinkDVRPopover;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 /**
  * Created by pattale on 04/11/2014.
  */
-public class LoginPopover extends Control implements ThinkDVRPopover.Page {
+public class LoginPopover extends TabPane implements ThinkDVRPopover.Page {
 
     private ThinkDVRPopover popover;
-    private WebView webView;
+    private WebView web;
+    private WebEngine webEngine;
+
+    /*public LoginPopover(String loc) {
+
+
+
+        *//*Platform.runLater(() -> {
+            webEngine = web.getEngine();
+            webEngine.load(loc);
+        });*//*
+
+
+    }*/
 
     @Override
     public void setPopover(ThinkDVRPopover popover) {
@@ -69,5 +87,11 @@ public class LoginPopover extends Control implements ThinkDVRPopover.Page {
 
     @Override protected double computePrefHeight(double width) {
         return 88;
+    }
+
+
+    @Override
+    protected void layoutChildren() {
+
     }
 }

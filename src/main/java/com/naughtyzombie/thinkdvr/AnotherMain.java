@@ -4,8 +4,10 @@ import com.naughtyzombie.thinkdvr.control.ThinkDVRPopover;
 import com.naughtyzombie.thinkdvr.control.ThinkDVRToolbar;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -13,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -68,6 +71,23 @@ public class AnotherMain extends Application {
         root.getChildren().add(popover);
 
         final LoginPopover rootPage = new LoginPopover();
+
+        /*Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+                Parent root = null;
+                fxmlLoader.setRoot(rootPage);
+                try {
+                    root = fxmlLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });*/
+
+
 
         listButton.setOnMouseClicked((MouseEvent e) -> {
             if (popover.isVisible()) {
