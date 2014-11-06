@@ -70,7 +70,7 @@ public class AnotherMain extends Application {
         popover.setPrefWidth(440);
         root.getChildren().add(popover);
 
-        final LoginPopover rootPage = new LoginPopover();
+        final LoginPopover rootPage = new LoginPopover("http://www.google.com");
 
         /*Platform.runLater(new Runnable() {
             @Override
