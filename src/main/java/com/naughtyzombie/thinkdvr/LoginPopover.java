@@ -13,22 +13,17 @@ import javafx.scene.web.WebView;
 /**
  * Created by pattale on 04/11/2014.
  */
-public class LoginPopover extends TabPane implements ThinkDVRPopover.Page {
+public class LoginPopover extends DatePicker implements ThinkDVRPopover.Page {
 
     private ThinkDVRPopover popover;
     private WebView web;
     private WebEngine webEngine;
 
     /*public LoginPopover(String loc) {
-
-
-
         *//*Platform.runLater(() -> {
             webEngine = web.getEngine();
             webEngine.load(loc);
         });*//*
-
-
     }*/
 
     @Override
