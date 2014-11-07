@@ -47,9 +47,7 @@ public abstract class CustomControl extends Region {
 
     @Override
     protected void layoutChildren() {
-        getChildren().stream().forEach((node) -> {
-            layoutInArea(node, 0, 0, getWidth(), getHeight(), 0, HPos.LEFT, VPos.TOP);
-        });
+        getChildren().stream().forEach((node) -> layoutInArea(node, 0, 0, getWidth(), getHeight(), 0, HPos.LEFT, VPos.TOP));
     }
 
     private void setMaxSize(Node node) {
