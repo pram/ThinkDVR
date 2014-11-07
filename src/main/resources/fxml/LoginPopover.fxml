@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane prefHeight="167.0" prefWidth="431.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <Label text="Please enter your first and last names:" GridPane.columnIndex="0" GridPane.columnSpan="2147483647" GridPane.rowIndex="0">
+      <GridPane.margin>
+        <Insets bottom="5.0" top="5.0" fx:id="x2" />
+      </GridPane.margin>
+    </Label>
+    <Label text="First name:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+      <GridPane.margin>
+        <Insets right="15.0" fx:id="x1" />
+      </GridPane.margin>
+    </Label>
+    <Label text="Last name:" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="2" />
+    <Label text="Full name:" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="3" />
+    <TextField fx:id="firstName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="1" />
+    <TextField fx:id="lastName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="2" />
+    <Label fx:id="fullName" text="Label" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
+      <GridPane.margin>
+        <Insets bottom="10.0" top="10.0" />
+      </GridPane.margin>
+    </Label>
+  </children>
+  <columnConstraints>
+    <ColumnConstraints hgrow="NEVER" minWidth="-1.0" prefWidth="-1.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <padding>
+    <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+  </padding>
+  <rowConstraints>
+    <RowConstraints fillHeight="true" minHeight="-1.0" prefHeight="-1.0" vgrow="NEVER" />
+    <RowConstraints minHeight="-1.0" prefHeight="-1.0" vgrow="NEVER" />
+    <RowConstraints maxHeight="-1.0" minHeight="-1.0" prefHeight="-1.0" vgrow="NEVER" />
+    <RowConstraints minHeight="-1.0" prefHeight="-1.0" vgrow="NEVER" />
+  </rowConstraints>
+</GridPane>

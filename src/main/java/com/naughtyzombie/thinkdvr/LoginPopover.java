@@ -1,18 +1,18 @@
 package com.naughtyzombie.thinkdvr;
 
+import com.naughtyzombie.thinkdvr.control.ExampleControl;
 import com.naughtyzombie.thinkdvr.control.ThinkDVRPopover;
-import com.naughtyzombie.thinkdvr.control.WebRegion;
 import javafx.scene.Node;
 
 /**
  * Created by pattale on 04/11/2014.
  */
-public class LoginPopover extends WebRegion implements ThinkDVRPopover.Page {
+public class LoginPopover extends ExampleControl implements ThinkDVRPopover.Page {
 
     private ThinkDVRPopover popover;
 
     public LoginPopover(String content) {
-        super(content);
+        super();
     }
 
 
