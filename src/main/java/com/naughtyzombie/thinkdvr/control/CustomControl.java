@@ -1,5 +1,6 @@
 package com.naughtyzombie.thinkdvr.control;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -28,11 +29,24 @@ public abstract class CustomControl extends Region {
         loader.setLocation(this.getViewURL());
 
         try {
-            Node root = (Node) loader.load();
-            setMaxSize(root);
+            Platform.runLater(new Runnable() {
 
-            this.getChildren().add(root);
-        } catch (IOException ex) {
+                @Override
+                public void run() {
+                    Node root = null;
+                    try {
+                        root = (Node) loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    setMaxSize(root);
+
+
+                }
+            });
+            //this.getChildren().add(root);
+
+        } catch (Exception ex) {
             Logger.getLogger(CustomControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

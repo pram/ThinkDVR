@@ -17,22 +17,28 @@ import java.util.Set;
 
 public class WebRegion extends Region {
 
-    final WebView webview = new WebView();
-    final WebEngine webEngine = webview.getEngine();
+    final WebView webView = new WebView();
+    final WebEngine webEngine = webView.getEngine();
+    //private WebView webView;
+    //private WebEngine webEngine;
+
      
-    public WebRegion(String content) {
-        webview.setPrefHeight(5);
+    public WebRegion( String content) {
+        //this.webView = webView;
+        //webEngine = webView.getEngine();
+
+        this.webView.setPrefHeight(5);
     	
         widthProperty().addListener(new ChangeListener<Object>() {
             @Override
             public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
                 Double width = (Double)newValue;
-                webview.setPrefWidth(width);
+                WebRegion.this.webView.setPrefWidth(width);
                 adjustHeight();
             }    
         });
 
-        webview.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+        this.webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             @Override
             public void changed(ObservableValue<? extends Worker.State> arg0, Worker.State oldState, Worker.State newState)         {
                 if (newState == Worker.State.SUCCEEDED) {
@@ -41,10 +47,10 @@ public class WebRegion extends Region {
             }
         });        
         
-        webview.getChildrenUnmodifiable().addListener(new ListChangeListener<Node>() {
+        this.webView.getChildrenUnmodifiable().addListener(new ListChangeListener<Node>() {
             @Override
             public void onChanged(Change<? extends Node> change) {
-                Set<Node> scrolls = webview.lookupAll(".scroll-bar");
+                Set<Node> scrolls = WebRegion.this.webView.lookupAll(".scroll-bar");
                 for (Node scroll : scrolls) {
                    scroll.setVisible(false);
                 }
@@ -52,7 +58,7 @@ public class WebRegion extends Region {
     	});
         
         setContent(content);
-        getChildren().add(webview);
+        getChildren().add(this.webView);
     }
     
     public void setContent(final String content) {
@@ -70,7 +76,7 @@ public class WebRegion extends Region {
     protected void layoutChildren() {
         double w = getWidth();
         double h = getHeight();
-        layoutInArea(webview,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(webView,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
     }
     
     private void adjustHeight() {
@@ -81,8 +87,8 @@ public class WebRegion extends Region {
                     Integer i = (Integer) result;
                     double height = new Double(i);
                     height = height + 20;
-                    webview.setPrefHeight(height);
-                    webview.getPrefHeight();
+                    webView.setPrefHeight(height);
+                    webView.getPrefHeight();
                 }
             } catch (JSException e) { }
         });
