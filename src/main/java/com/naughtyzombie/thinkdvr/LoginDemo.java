@@ -41,12 +41,11 @@ public class LoginDemo extends Application {
         //exceptionHandler.exceptionProperty().addListener(e ->
         //        Dialogs.create().style(DialogStyle.NATIVE).showException(exceptionHandler.getException()));
 
-        LoginWithFacebookButton facebookButton = new LoginWithFacebookButton(PropertySuppliers.create(keyField.textProperty()),
+        /*LoginWithFacebookButton facebookButton = new LoginWithFacebookButton(PropertySuppliers.create(keyField.textProperty()),
                 PropertySuppliers.create(secretField.textProperty()),
                 PropertySuppliers.create(callbackField.textProperty()),
                 user -> resultLabel.setText("Welcome " + user.getFirstName() + " " + user.getLastName()),
-                exceptionHandler);
-
+                exceptionHandler);*/
 
         LoginWithTwitterButton twitterButton = new LoginWithTwitterButton(PropertySuppliers.create(keyField.textProperty()),
                 PropertySuppliers.create(secretField.textProperty()),
@@ -55,9 +54,10 @@ public class LoginDemo extends Application {
                 exceptionHandler);
         twitterButton.setAlignment(Pos.CENTER);
 
-        VBox.setMargin(facebookButton, new Insets(12, 0, 0, 0));
+        /*VBox.setMargin(facebookButton, new Insets(12, 0, 0, 0));*/
         VBox.setMargin(resultLabel, new Insets(12, 0, 0, 0));
-        VBox box = new VBox(keyField, secretField, callbackField, facebookButton, twitterButton, resultLabel);
+        /*VBox box = new VBox(keyField, secretField, callbackField, facebookButton, twitterButton, resultLabel);*/
+        VBox box = new VBox(keyField, secretField, callbackField, twitterButton, resultLabel);
         box.setAlignment(Pos.TOP_CENTER);
         box.setPadding(new Insets(12));
         box.setSpacing(6);
