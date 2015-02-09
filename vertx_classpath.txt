@@ -1,0 +1,5 @@
+src/main/resources
+bin
+out/production/ThinkDVR
+out/test/ThinkDVR
+build/deps
