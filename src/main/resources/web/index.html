@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="c3" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="c3" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="c3" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="c3" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>c3</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="js/bower_components/html5-boilerplate/css/normalize.css">
+  <link rel="stylesheet" href="js/bower_components/html5-boilerplate/css/main.css">
+  <link rel="stylesheet" href="js/bower_components/angular-material/angular-material.css">
+  <link rel="stylesheet" href="css/c3.css">
+  <script src="js/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body layout="row">
+<md-sidenav layout="column" style="overflow: hidden; display: flex;" class="md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope md-locked-open" md-component-id="left" md-is-locked-open="$media('gt-sm')" tabindex="-1">
+  <md-toolbar style="min-height: 64px; max-height:64px;" layout="column" class="md-default-theme">
+    <h1 class="md-toolbar-tools" flex="" layout="column">
+      <a href="" ng-click="goHome()" layout="row" flex="" tabindex="0">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" style="
+              width: 60px; height: 60px;">
+            <path fill-opacity="0.5" fill="#ffffff" d=" M 0.00 0.00 L 72.59 0.00 C 52.45 19.89 32.42 39.92 12.50 60.03 C 19.60 65.47 29.00 61.63 36.02 58.03 C 43.91 54.38 50.08 47.15 58.99 45.85 C 62.81 45.00 67.03 46.36 69.50 49.41 C 70.80 51.22 71.76 53.23 72.75 55.21 C 72.83 36.81 72.41 18.39 72.93 0.00 L 78.00 0.00 L 78.00 76.00 L 0.00 76.00 L 0.00 0.00 Z" />
+            <path fill="#79b1e0" d=" M 72.59 0.00 L 72.93 0.00 C 72.41 18.39 72.83 36.81 72.75 55.21 C 71.76 53.23 70.80 51.22 69.50 49.41 C 67.03 46.36 62.81 45.00 58.99 45.85 C 50.08 47.15 43.91 54.38 36.02 58.03 C 29.00 61.63 19.60 65.47 12.50 60.03 C 32.42 39.92 52.45 19.89 72.59 0.00 Z" />
+            <path fill="#012f53" d=" M 46.57 63.69 C 51.71 59.98 57.41 56.05 64.03 56.17 C 67.38 56.01 70.56 57.82 72.57 60.42 C 72.90 64.26 72.57 68.14 72.68 72.00 C 58.05 71.73 43.37 72.55 28.77 71.56 C 35.37 70.87 41.09 67.14 46.57 63.69 Z" />
+            <path fill="#012f53" d=" M 0.72 71.98 C 3.49 68.58 6.88 65.73 9.86 62.52 C 11.64 67.36 16.39 70.55 21.26 71.70 C 14.43 72.31 7.56 71.88 0.72 71.98 Z" />
+          </svg>
+        <div flex="" style="line-height:40px; text-indent: 15px;">C<sup>3</sup></div>
+      </a>
+    </h1>
+  </md-toolbar>
+  <md-content flex="" style="overflow: auto;" class="md-default-theme">
+    <div ng-controller="EnvController">
+
+      <md-content class="md-padding">
+          <md-input-container flex>
+            <label>Environment Filter</label>
+            <input ng-model="env.filter">
+          </md-input-container>
+        </md-content>
+
+      <div ng-repeat="environment in environments | filter: env.filter | orderBy: name">
+        <button class="menu-item menu-title md-menu-item" md-ink-ripple="#bbb">{{environment.envName}}</button>
+        <md-switch ng-model="data.cb1" aria-label="Switch 1">Switch 1: {{ data.cb1 }}</md-switch>
+      </div>
+
+      <md-content style="overflow: auto;">
+        <ul class="docs-menu">
+          <li ng-repeat="environment in environments | filter: env.filter | orderBy: name" class="parent-list-item" ng-class="parentActive">
+            <h2 class="menu-heading">
+              {{environment.envName}}
+            </h2>
+            <menu-link section="section" ></menu-link>
+
+            <menu-toggle section="section" ></menu-toggle>
+        </ul>
+      </md-content>
+      <md-content style="overflow: auto;">
+        <ul class="docs-menu">
+          <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="parentActive">
+            <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
+              {{section.name}}
+            </h2>
+            <menu-link section="section" ng-if="section.type === 'link'"></menu-link>
+
+            <menu-toggle section="section" ng-if="section.type === 'toggle'"></menu-toggle>
+
+            <ul ng-if="section.children" class="menu-nested-list">
+              <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
+                <menu-toggle section="child"></menu-toggle>
+              </li>
+            </ul>
+        </ul>
+      </md-content>
+    </div>
+
+
+  </md-content>
+  </md-sidenav>
+
+    <div layout="column" layout-fill tabIndex="-1" role="main">
+      <md-toolbar layout="column">
+      </md-toolbar>
+      <md-content ng-view md-scroll-y flex class="md-padding"></md-content>
+    </div>
+
+  <!--<ul class="menu">
+    <li><a href="#/view1">view1</a></li>
+    <li><a href="#/view2">view2</a></li>
+    <li></li>
+  </ul>-->
+
+  <!--<div ng-controller="AppCtrl">
+    <md-button ng-click="AppCtrl.sayHi()">Click Me 2</md-button>
+    <a ng-click="AppCtrl.sayHi()">view2</a>
+    <md-button ng-click="AppCtrl.testButtonMessage()">Test Button</md-button>
+  </div>-->
+
+  <!--<div ng-controller="NewsSend">
+    <md-button ng-click="NewsSend.send()">Send</md-button>
+  </div>
+
+  <div ng-controller="NewsSend">
+    <md-button ng-click="NewsSend.sendService()">Send Service</md-button>
+  </div>-->
+
+  <!--<div id="content" class="col-xs-12 col-sm-12 col-md-8" ng-view>-->
+    <!-- This div will be templated by AngularJS -->
+    <!--[Template content will be inserted here]-->
+  <!--</div>-->
+
+  <!--<div ng-controller="MembersCtrl">
+    <md-button ng-click="testMessage()">Send Test</md-button>
+  </div>-->
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <!--<div ng-view></div>-->
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="js/bower_components/hammerjs/hammer.js"></script>
+  <script src="js/bower_components/angular/angular.js"></script>
+  <script src="js/bower_components/angular-animate/angular-animate.js"></script>
+  <script src="js/bower_components/angular-route/angular-route.js"></script>
+  <script src="js/bower_components/angular-aria/angular-aria.js"></script>  
+  <script src="js/bower_components/angular-resource/angular-resource.js"></script>
+  <script src="js/bower_components/angular-material/angular-material.js"></script>
+  <script src="js/bower_components/sockjs/sockjs.js"></script>
+  <script src="js/bower_components/vertxbus.js/index.js"></script>
+  <script src="js/bower_components/angular-vertxbus/dist/angular-vertxbus.js"></script>
+  <script src="js/c3.js"></script>    
+</body>
+</html>
