@@ -14,6 +14,7 @@
     "sockjs": "0.3.x",
     "html5-boilerplate": "~4.3.0",
     "angular-vertxbus": "0.11.x",
-    "angular-material": "0.7.x" 
+    "angular-material": "0.7.x",
+    "angular-google-maps": "2.x.x" 
   }
 }

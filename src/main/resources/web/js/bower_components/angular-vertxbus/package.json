@@ -1,0 +1,52 @@
+{
+  "name": "angular-vertxbus",
+  "version": "0.11.2",
+  "description": "AngularJS facade and service acting as a Vert.x SockJS client",
+  "main": "dist/angular-vertxbus.js",
+  "keywords": ["angular", "vertx", "facade", "websocket"],
+  "scripts": {
+    "prepublish": "bower install",
+    "test": "grunt install-test && grunt test",
+    "test-scopes": "grunt install-test && for f in test_scopes/*; do TEST_SCOPE=\"`basename $f`\" grunt test; done",
+    "start-it-web-server": "coffee test/e2e/server.coffee",
+    "install-it-vertx-server": "cd test/e2e/vertx && ./install.sh",
+    "start-it-vertx-server": "cd test/e2e/vertx/app && ../vert.x-2.1.1/bin/vertx run config.js"
+  },
+  "author": {
+    "name": "Jan Philipp",
+    "email": "knallisworld@googlemail.com"
+  },
+  "homepage": "http://github.com/knalli/angular-vertxbus",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knalli/angular-vertxbus"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "~1.3.12",
+    "coffee-script": "~1.8.0",
+    "express": "~4.10.4",
+    "grunt": "~0.4.5",
+    "grunt-bower-install-simple": "^1.0.3",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-coffee": "~0.12.0",
+    "grunt-contrib-concat": "~0.5.x",
+    "grunt-contrib-jshint": "~0.10.x",
+    "grunt-contrib-uglify": "~0.6.x",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-conventional-changelog": "~1.1.x",
+    "grunt-karma": "~0.9.0",
+    "grunt-ng-annotate": "^0.8.0",
+    "istanbul": "^0.3.5",
+    "karma": "~0.12.28",
+    "karma-chrome-launcher": "~0.1.5",
+    "karma-coverage": "^0.2.7",
+    "karma-expect": "~1.1.0",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-mocha": "~0.1.9",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "load-grunt-tasks": "~1.0.0",
+    "lodash": "~2.4.x",
+    "mocha": "~2.0.1"
+  }
+}
