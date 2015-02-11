@@ -4,11 +4,15 @@
 <!--[if IE 8]>         <html lang="en" ng-app="c3" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="thinkdvr" class="no-js"> <!--<![endif]-->
 
-<head></head>
+<head>
+  <link rel="stylesheet" href="css/thinkdvr.css">
+</head>
 
 <body>
-
+<div ng-controller="mainMapController">
   <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+</div>
+  
 
 
 
