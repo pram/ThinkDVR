@@ -5,12 +5,18 @@
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="thinkdvr" class="no-js"> <!--<![endif]-->
 
 <head>
+  <link rel="stylesheet" href="js/bower_components/angular-material/angular-material.css">
   <link rel="stylesheet" href="css/thinkdvr.css">
 </head>
 
 <body>
-<div ng-controller="mainMapController">
-  <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+<div ng-controller="mainMapController as vm">
+  <ui-gmap-google-map draggable="true" center="vm.map.center" zoom="vm.map.zoom">
+    <ui-gmap-markers models="vm.places" coords="'self'" icon="'icon'" idKey="'idKey'"></ui-gmap-markers>
+  </ui-gmap-google-map>
+  <md-content >
+    <md-button>Add Flag</md-button>
+  </md-content>
 </div>
   
 
