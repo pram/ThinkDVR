@@ -168,7 +168,7 @@
           <includeProjectDependencies>true</includeProjectDependencies>
           <includePluginDependencies>false</includePluginDependencies>
           <classpathScope>compile</classpathScope>
-          <mainClass>${storm.topology}</mainClass>
+          <mainClass>${com.naughtyzombie.storm}</mainClass>
         </configuration>
       </plugin>
 
