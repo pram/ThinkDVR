@@ -31,26 +31,7 @@ import com.lambdaworks.redis.RedisConnection;
 //import spout/RandomSentenceSpout
 import com.naughtyzombie.storm.spout.RandomSentenceSpout;
 
-//********** END stage 2 exercise part 1-of-2 ***********
-
-/**
- * This is a basic example of a Storm topology.
- */
-
-/**
- * This is a basic example of a storm topology.
- *
- * This topology demonstrates how to add three exclamation marks '!!!'
- * to each word emitted
- *
- * This is an example for Udacity Real Time Analytics Course - ud381
- *
- */
 public class ReporterExclamationTopology {
-
-  /**
-   * A bolt that adds the exclamation marks '!!!' to word
-   */
   public static class ExclamationBolt extends BaseRichBolt
   {
     // To output tuples from this bolt to the next stage bolts, if any
