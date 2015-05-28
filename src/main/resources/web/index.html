@@ -16,7 +16,16 @@
   </ui-gmap-google-map>
   <md-content >
     <md-button>Add Flag</md-button>
+    <md-button>Remove Flag</md-button>
   </md-content>
+</div>
+
+<div ng-controller="BookController">  
+    Id: <span ng-bind="book.id"></span>
+    <br/>
+    Name:<input type="text" ng-model="book.name" />
+    <br/>
+    Author: <input type="text" ng-model="book.author" />
 </div>
   
 
