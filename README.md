@@ -4,6 +4,7 @@ ThinkDVR
 View and Analyse Twitter in real time. 
 
 Requirements:
+* Java
 * Apache Storm
 
 Run the Storm server using the command
