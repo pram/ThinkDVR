@@ -1,10 +1,10 @@
 import AssemblyKeys._
 
-name := "spark-twitter-lang-classifier"
+name := "thinkdvr-classifier"
 
 version := "1.0"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.7"
 
 val sparkVersion: String = "1.3.0"
 

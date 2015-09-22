@@ -32,11 +32,12 @@ object ExamineAndTrain {
       println(gson.toJson(jsonParser.parse(tweet)))
     }
 
-    val tweetTable = sqlContext.read.json(tweetInput).cache()
-    tweetTable.registerTempTable("tweetTable")
+    //TODO work out the best approach for these lines
+    //val tweetTable = sqlContext.read.json(tweetInput).cache()
+    //tweetTable.registerTempTable("tweetTable")
 
     println("------Tweet table Schema---")
-    tweetTable.printSchema()
+    //tweetTable.printSchema()
 
     println("----Sample Tweet Text-----")
     sqlContext.sql("SELECT text FROM tweetTable LIMIT 10").collect().foreach(println)
