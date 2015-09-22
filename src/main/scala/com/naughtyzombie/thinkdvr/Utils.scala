@@ -42,7 +42,7 @@ object Utils {
   }
 
   def getAuth = {
-    Some(new OAuthAuthorization(new ConfigurationBuilder().build()))
+    Some(new OAuthAuthorization(new ConfigurationBuilder().setUseSSL(true).build()))
   }
 
   /**
