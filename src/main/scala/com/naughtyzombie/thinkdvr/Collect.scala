@@ -43,8 +43,10 @@ object Collect {
 
     tweetStream.foreachRDD((rdd, time) => {
       val count = rdd.count()
+      //println("Goooooo " + count)
       if (count > 0) {
         val outputRDD = rdd.repartition(partitionsEachInterval)
+	//println("wooo" + outputRDD)
         outputRDD.saveAsTextFile(outputDirectory + "/tweets_" + time.milliseconds.toString)
         numTweetsCollected += count
         if (numTweetsCollected > numTweetsToCollect) {
