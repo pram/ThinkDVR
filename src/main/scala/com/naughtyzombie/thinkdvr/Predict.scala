@@ -19,15 +19,15 @@ object Predict {
     val Array(modelFile, Utils.IntParam(clusterNumber)) =
       Utils.parseCommandLineWithTwitterCredentials(args)
 
-    println("Initializing Streaming Spark Context...")
+    println("Init Streaming Spark Context...")
     val conf = new SparkConf().setAppName(this.getClass.getSimpleName)
     val ssc = new StreamingContext(conf, Seconds(5))
 
-    println("Initializing Twitter stream...")
+    println("Init Twitter stream...")
     val tweets = TwitterUtils.createStream(ssc, Utils.getAuth)
     val statuses = tweets.map(_.getText)
 
-    println("Initalizaing the the KMeans model...")
+    println("Init the the KMeans model...")
     val model = new KMeansModel(ssc.sparkContext.objectFile[Vector](modelFile.toString).collect())
 
     val filteredTweets = statuses
@@ -35,7 +35,7 @@ object Predict {
     filteredTweets.print()
 
     // Start the streaming computation
-    println("Initialization complete.")
+    println("Init complete.")
     ssc.start()
     ssc.awaitTermination()
   }
